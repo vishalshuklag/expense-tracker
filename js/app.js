@@ -36,7 +36,56 @@ class UI {
 
   // show balance method
   showBalance() {
-    console.log("show balance");
+    const expense = this.totalExpense();
+    const total = parseInt(this.budgetAmount.textContent) - expense;
+    this.balanceAmount.textContent = total;
+    if (total < 0) {
+      this.balance.clasadd("showRed");
+      this.balance.classList.remove("showGreen", "showBlack");
+    } else if (total > 0) {
+      this.balance.classList.add("showGreen");
+      this.balance.classList.remove("showRed", "showBlack");
+    } else if (total === 0) {
+      this.balance.classList.add("showBlack");
+      this.balance.classList.remove("showRed", "showGreen");
+    }
+  }
+
+  //total expense
+  totalExpense() {
+    const total = 400;
+    return total;
+  }
+
+  // submit expense form
+  submitExpenseForm() {
+    const expenseTitle = this.expenseInput.value;
+    const expenseValue = this.amountInput.value;
+    console.log(this.amountInput);
+    if (expenseValue === "" || expenseTitle === "" || expenseValue < 0) {
+      this.expenseFeedback.classList.add("show-item");
+      this.expenseFeedback.innerHTML = `<p>
+      Expense Title or Amount cannot be Empty or Negative
+      </p>`;
+
+      setTimeout(() => {
+        this.expenseFeedback.classList.remove("show-item");
+      }, 3000);
+    } else {
+      const amount = parseInt(expenseValue);
+      console.log(amount);
+      this.expenseForm.reset();
+
+      let expense = {
+        id: this.itemID,
+        title: expenseTitle,
+        amount,
+      };
+      this.itemID++;
+      this.itemList.push(expense);
+
+      console.log(this.itemList);
+    }
   }
 }
 
@@ -56,6 +105,7 @@ function eventListeners() {
   // expense form submit
   expenseForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    ui.submitExpenseForm();
   });
   // expense list event
   expenseList.addEventListener("click", (event) => {
